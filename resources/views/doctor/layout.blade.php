@@ -36,12 +36,14 @@
             </div>
             <nav :class="{ 'block': open, 'hidden': !open }"
                 class="flex-grow md:block px-4 pb-4 md:pb-0 md:overflow-y-auto">
-                <a class="block px-4 py-2 mt-2 text-sm font-semibold text-white bg-transparent rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline {{ request()->is('user/dashboard') ? 'bg-yellow-500 text-black' : '' }}"
-                    href="/admin/dashboard">Home</a>
-                <a class="block px-4 py-2 mt-2 text-sm font-semibold text-white bg-transparent rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline {{ request()->is('admin/event') ? 'bg-yellow-500 text-black' : '' }}"
-                    href="/admin/event">Event</a>
-                <a class="block px-4 py-2 mt-2 text-sm font-semibold text-white bg-transparent rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline {{ request()->is('admin/peserta') ? 'bg-yellow-500 text-black' : '' }}"
-                    href="/admin/peserta">Peserta</a>
+                <a class="block px-4 py-2 mt-2 text-sm font-semibold text-white bg-transparent rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline {{ request()->is('dokter/dashboard') ? 'bg-yellow-500 text-black' : '' }}"
+                    href="/dokter/dashboard">Home</a>
+                <a class="block px-4 py-2 mt-2 text-sm font-semibold text-white bg-transparent rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline {{ request()->is('dokter/jadwal-periksa') ? 'bg-yellow-500 text-black' : '' }}"
+                    href="/dokter/jadwal-periksa">Jadwal Periksa</a>
+                <a class="block px-4 py-2 mt-2 text-sm font-semibold text-white bg-transparent rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline {{ request()->is('dokter/periksa') ? 'bg-yellow-500 text-black' : '' }}"
+                    href="/dokter/periksa">Periksa Pasien</a>
+                <a class="block px-4 py-2 mt-2 text-sm font-semibold text-white bg-transparent rounded-lg hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline {{ request()->is('dokter/detail-periksa') ? 'bg-yellow-500 text-black' : '' }}"
+                    href="/dokter/detail-periksa">Detail Periksa</a>
                 <form action="{{ route('dokter.logout') }}" method="POST">
                     @csrf
                     <button type="submit"

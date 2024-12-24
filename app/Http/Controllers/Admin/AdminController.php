@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Dokter;
+use App\Models\Obat;
+use App\Models\Pasien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -12,7 +15,10 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
+        $dokters = Dokter::count();
+        $obats = Obat::count();
+        $pasiens = Pasien::count();
+        return view('admin.dashboard', compact('dokters', 'obats', 'pasiens'));
     }
 
     public function login()

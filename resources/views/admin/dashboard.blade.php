@@ -41,12 +41,16 @@
             <!-- New Customers Card -->
             <div class="bg-white p-6 rounded-lg shadow border-t-4 border-green-600">
                 <h3 class="text-gray-600">Total Dokter</h3>
-                <p class="text-2xl font-bold">1.34k</p>
+                <p class="text-2xl font-bold">{{ $dokters }}</p>
             </div>
             <!-- New Orders Card -->
             <div class="bg-white p-6 rounded-lg shadow border-t-4 border-blue-600">
                 <h3 class="text-gray-600">Total Obat</h3>
-                <p class="text-2xl font-bold">123</p>
+                <p class="text-2xl font-bold">{{ $obats }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow border-t-4 border-blue-600">
+                <h3 class="text-gray-600">Total Pasien</h3>
+                <p class="text-2xl font-bold">{{ $pasiens }}</p>
             </div>
         </div>
     </div>

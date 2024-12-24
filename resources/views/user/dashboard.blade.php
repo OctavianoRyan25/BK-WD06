@@ -52,23 +52,211 @@
                     <p class="text-gray-600 font-bold">Silahkan daftar disini</p>
                 </div>
                 <div class="flex-none w-14 h-14 flex items-center justify-center">
-                    <a href="{{ route('user.register') }}"
+                    <button onclick="openModal()"
                         class="bg-blue-500 text-white font-bold p-2 rounded-lg hover:scale-105 transition duration-200">
                         Daftar
-                    </a>
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- New Customers Card -->
-            <div class="bg-white p-6 rounded-lg shadow border-t-4 border-green-600">
-                <h3 class="text-gray-600">Total Kerja Sama</h3>
-                <p class="text-2xl font-bold">1.34k</p>
+        {{-- Tabel histori pemeriksaan --}}
+        <div class="row mb-6">
+            <div class="col-md-12">
+                <h1 class="font-bold text-3xl">Histori Pemeriksaan</h1>
             </div>
-            <!-- New Orders Card -->
-            <div class="bg-white p-6 rounded-lg shadow border-t-4 border-blue-600">
-                <h3 class="text-gray-600">Total Research Collaboration</h3>
-                <p class="text-2xl font-bold">123</p>
+        </div>
+        <div class="row mb-6">
+            <div class="col-md-12">
+                <table class="table-auto w-full border-collapse border border-gray-300 rounded">
+                    <thead>
+                        <tr class="bg-green-700 text-white">
+                            <th class="border border-gray-300 px-4 py-2">No</th>
+                            <th class="border border-gray-300 px-4 py-2">Nama Dokter</th>
+                            <th class="border border-gray-300 px-4 py-2">Poli</th>
+                            <th class="border border-gray-300 px-4 py-2">Jadwal</th>
+                            <th class="border border-gray-300 px-4 py-2">Keluhan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($daftarPolis as $daftarPoli)
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    {{ $daftarPoli->jadwalPeriksa->dokter->nama }}
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    {{ $daftarPoli->jadwalPeriksa->dokter->poli->nama_poli }}
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    {{ $daftarPoli->jadwalPeriksa->hari }}, {{ $daftarPoli->jadwalPeriksa->jam_mulai }}
+                                    -
+                                    {{ $daftarPoli->jadwalPeriksa->jam_selesai }}
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">{{ $daftarPoli->keluhan }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 text-center" colspan="6">Tidak ada data</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{-- Modal --}}
+        <div id="daftarModal"
+            class="fixed inset-0 hidden items-center justify-center bg-gray-900 bg-opacity-50 flex transition-opacity duration-300">
+            <div class="bg-white p-6 rounded-lg shadow-lg transform transition-all duration-300 scale-90 opacity-0 w-full sm:w-3/4 lg:w-6/12"
+                id="createPesertaContent">
+                <h2 class="text-xl font-bold mb-4 text-start">Tambah Jadwal Periksa</h2>
+                <hr class="bg-black mb-2" />
+                <form id="pesertaForm" action="{{ route('user.store') }}" method="POST">
+                    @csrf
+                    <div class="flex flex-wrap">
+                        <div class="mb-6 px-3 w-full">
+                            <label for="pasien_id" class="block text-sm font-medium text-gray-700">Nama Dokter</label>
+                            <input type="hidden" name="pasien_id" id="pasien_id"
+                                class="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                required value="{{ auth()->guard('pasien')->user()->id }}" readonly>
+                            <input type="text" name="nama_dokter" id="dnama_dokter"
+                                class="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                required value="{{ auth()->guard('pasien')->user()->nama }}" disabled>
+                            <p class="text-red-500 text-sm mt-2 error" id="error-pasien_id"></p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap">
+                        <div class="mb-6 px-3 w-full lg:w-1/2">
+                            <label for="poli" class="block text-sm font-medium text-gray-700">Pilih poli</label>
+                            <select name="poli" id="poli"
+                                class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                                required>
+                                <option value="">--Pilih Poli--</option>
+                                @foreach ($polis as $poli)
+                                    <option value="{{ $poli->id }}">{{ $poli->nama_poli }}</option>
+                                @endforeach
+                            </select>
+                            <p class="text-red-500 text-sm mt-2 error" id="error-hari"></p>
+                        </div>
+                        <div class="mb-6 px-3 w-full lg:w-1/2">
+                            <label for="jadwal" class="block text-sm font-medium text-gray-700">Pilih Jadwal</label>
+                            <select name="jadwal_periksa_id" id="jadwal"
+                                class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                                required>
+                                <option value="" disabled>Pilih Jadwal</option>
+                            </select>
+                            <p class="text-red-500 text-sm mt-2 error" id="error-hari"></p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap">
+                        <div class="mb-6 px-3 w-full">
+                            <label for="keluhan" class="block text-sm font-medium text-gray-700">keluhan</label>
+                            <textarea name="keluhan" id="keluhan"
+                                class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                                required></textarea>
+                            <p class="text-red-500 text-sm mt-2 error" id="error-keluhan"></p>
+                        </div>
+                    </div>
+
+                </form>
+                <div class="flex justify-between gap-6 mt-6 px-3">
+                    <button onclick="closeModal()" class="bg-red-500 text-white px-4 py-2 rounded">Close</button>
+                    <button id="submitModalBtn" type="button" class="bg-blue-500 text-white px-4 py-2 rounded"
+                        onclick="submitForm()">Submit</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function openModal() {
+            const modal = document.getElementById('daftarModal');
+            const modalContent = document.getElementById('createPesertaContent');
+
+            modal.classList.remove('hidden'); // Show modal
+            setTimeout(() => {
+                modalContent.classList.remove('scale-90', 'opacity-0'); // Add transition effect
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10); // Delay to trigger transition
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('daftarModal');
+            const modalContent = document.getElementById('createPesertaContent');
+
+            modalContent.classList.add('scale-90', 'opacity-0'); // Start hiding transition
+            modalContent.classList.remove('scale-100', 'opacity-100');
+
+            setTimeout(() => {
+                modal.classList.add('hidden'); // Hide modal after transition ends
+            }, 300); // Match the duration of the transition
+        }
+
+        function submitForm() {
+            const form = document.getElementById('pesertaForm');
+            form.submit();
+        }
+
+        function openPoliModal() {
+            const modal = document.getElementById('daftarPoliModal');
+            const modalContent = document.getElementById('createPesertaContent');
+
+            modal.classList.remove('hidden'); // Show modal
+            setTimeout(() => {
+                modalContent.classList.remove('scale-90', 'opacity-0'); // Add transition effect
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10); // Delay to trigger transition
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Event ketika poli dipilih
+            $('#poli').on('change', function() {
+                const poliId = $(this).val();
+                const jadwalDropdown = $('#jadwal');
+
+                // Kosongkan dropdown jadwal
+                jadwalDropdown.empty();
+                jadwalDropdown.append('<option value="" disabled selected>Loading...</option>');
+
+                // Fetch jadwal berdasarkan poli
+                if (poliId) {
+                    $.ajax({
+                        url: `/user/get-jadwal-by-poli/${poliId}`,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            // Reset dropdown jadwal
+                            jadwalDropdown.empty();
+                            jadwalDropdown.append(
+                                '<option value="" disabled selected>Pilih Jadwal</option>');
+                            data.length === 0 && jadwalDropdown.append(
+                                '<option value="" disabled>Tidak Ada Jadwal</option>');
+
+                            // Populate jadwal
+                            data.forEach(function(jadwal) {
+                                const dokterName = jadwal.dokter.nama ??
+                                    'Tidak Diketahui';
+                                jadwalDropdown.append(
+                                    `<option value="${jadwal.id}">
+                                ${jadwal.hari}, ${jadwal.jam_mulai} - ${jadwal.jam_selesai} (Dr.  ${dokterName})
+                            </option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            jadwalDropdown.empty();
+                            jadwalDropdown.append(
+                                '<option value="" disabled>Gagal Memuat Jadwal</option>');
+                        }
+                    });
+                } else {
+                    jadwalDropdown.append(
+                        '<option value="" disabled selected>Pilih Poli Terlebih Dahulu</option>');
+                }
+            });
+        });
+    </script>
 @endsection

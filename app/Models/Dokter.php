@@ -18,4 +18,9 @@ class Dokter extends Authenticatable
     {
         return $this->belongsTo(Poli::class, 'id_poli');
     }
+
+    public function jadwalPeriksas()
+    {
+        return $this->hasMany(JadwalPeriksa::class, 'dokter_id');
+    }
 }

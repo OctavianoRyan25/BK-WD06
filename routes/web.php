@@ -5,8 +5,11 @@ use App\Http\Controllers\Admin\ObatController;
 use App\Http\Controllers\Admin\PoliController;
 use App\Http\Controllers\Admin\DokterController;
 use App\Http\Controllers\Admin\PasienController;
+use App\Http\Controllers\Doctor\DetailPeriksaController;
 use App\Http\Controllers\Doctor\Auth\DoctorAuthController;
 use App\Http\Controllers\Doctor\DokterController as DoctorDokterController;
+use App\Http\Controllers\Doctor\JadwalPeriksaController;
+use App\Http\Controllers\Doctor\PeriksaController;
 use App\Http\Controllers\User\Auth\AuthController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +35,8 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::group(['middleware' => 'auth:pasien'], function () {
         Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
         Route::POST('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/get-jadwal-by-poli/{id}', [UserController::class, 'getJadwalByPoli']);
+        Route::post('/store', [UserController::class, 'store'])->name('store');
     });
     // Must be a guest to access these routes
     Route::group(['middleware' => 'guest:pasien'], function () {
@@ -48,6 +53,23 @@ Route::group(['prefix' => 'dokter', 'as' => 'dokter.'], function () {
     Route::group(['middleware' => 'auth:dokter'], function () {
         Route::get('/dashboard', [DoctorDokterController::class, 'index'])->name('dashboard');
         Route::POST('/logout', [DoctorAuthController::class, 'logout'])->name('logout');
+        Route::get('/profile/{id}', [DoctorDokterController::class, 'profile'])->name('profile');
+        Route::put('/profile/{id}/update', [DoctorDokterController::class, 'updateProfile'])->name('profile.update');
+
+        Route::get('/jadwal-periksa', [JadwalPeriksaController::class, 'index'])->name('jadwal-periksa');
+        Route::post('/jadwal-periksa/store', [JadwalPeriksaController::class, 'store'])->name('jadwal-periksa.store');
+        Route::put('/jadwal-periksa/update/{id}', [JadwalPeriksaController::class, 'update'])->name('jadwal-periksa.update');
+        Route::delete('/jadwal-periksa/delete/{id}', [JadwalPeriksaController::class, 'destroy'])->name('jadwal-periksa.delete');
+
+        Route::get('/periksa', [PeriksaController::class, 'index'])->name('periksa');
+        Route::get('/periksa/find/{id}', [PeriksaController::class, 'find'])->name('periksa.find');
+        Route::post('/periksa/store', [PeriksaController::class, 'store'])->name('periksa.store');
+        Route::get('/periksa/edit/{id}', [PeriksaController::class, 'edit'])->name('periksa.edit');
+        Route::put('/periksa/update/{id}', [PeriksaController::class, 'update'])->name('periksa.update');
+        Route::delete('/periksa/delete/{id}', [PeriksaController::class, 'destroy'])->name('periksa.delete');
+
+        Route::get('/detail-periksa', [DetailPeriksaController::class, 'index'])->name('detail-periksa');
+        Route::get('/detail-periksa/show/{id}', [DetailPeriksaController::class, 'show'])->name('detail-periksa.show');
     });
     // Must be a guest to access these routes
     Route::group(['middleware' => 'guest:dokter'], function () {

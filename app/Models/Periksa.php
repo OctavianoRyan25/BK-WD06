@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Obat extends Model
+class Periksa extends Model
 {
     use HasFactory;
 
@@ -13,8 +13,13 @@ class Obat extends Model
         'id'
     ];
 
+    public function daftarPoli()
+    {
+        return $this->belongsTo(DaftarPoli::class, 'daftar_poli_id');
+    }
+
     public function detailPeriksa()
     {
-        return $this->hasMany(DetailPeriksa::class, 'obat_id');
+        return $this->hasMany(DetailPeriksa::class, 'periksa_id');
     }
 }

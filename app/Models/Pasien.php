@@ -17,4 +17,9 @@ class Pasien extends Authenticatable
         'no_hp',
         'no_rm',
     ];
+
+    public function daftarPoli()
+    {
+        return $this->hasMany(DaftarPoli::class, 'pasien_id');
+    }
 }

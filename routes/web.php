@@ -69,7 +69,7 @@ Route::group(['prefix' => 'dokter', 'as' => 'dokter.'], function () {
         Route::delete('/periksa/delete/{id}', [PeriksaController::class, 'destroy'])->name('periksa.delete');
 
         Route::get('/detail-periksa', [DetailPeriksaController::class, 'index'])->name('detail-periksa');
-        Route::get('/detail-periksa/show/{id}', [DetailPeriksaController::class, 'show'])->name('detail-periksa.show');
+        Route::get('/detail-periksa/show', [DetailPeriksaController::class, 'show'])->name('detail-periksa.show');
     });
     // Must be a guest to access these routes
     Route::group(['middleware' => 'guest:dokter'], function () {

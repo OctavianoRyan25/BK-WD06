@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\DaftarPoli;
+use App\Models\DetailPeriksa;
 use App\Models\Dokter;
 use App\Models\JadwalPeriksa;
 use App\Models\Poli;
@@ -18,7 +19,11 @@ class UserController extends Controller
     {
         $polis = Poli::all();
         $daftarPolis = DaftarPoli::with(['pasien', 'jadwalPeriksa'])->where('pasien_id', auth()->guard('pasien')->user()->id)->get();
-        return view('user.dashboard', compact('polis', 'daftarPolis'));
+        $riwayatPeriksas = DetailPeriksa::with(['periksa.daftarPoli', 'obat'])->whereHas('periksa.daftarPoli', function ($query) {
+            $query->where('pasien_id', auth()->guard('pasien')->user()->id);
+        })->get();
+        // return response()->json([$polis, $daftarPolis, $riwayatPeriksas], 200);
+        return view('user.dashboard', compact('polis', 'daftarPolis', 'riwayatPeriksas'));
     }
 
 

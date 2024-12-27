@@ -47,13 +47,9 @@
             <!-- Poli -->
             <div>
                 <label for="id_poli" class="block text-sm font-medium text-gray-700">Poli</label>
-                <select name="id_poli" id="id_poli"
-                    class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option value="{{ $dokter->poli->id }}" selected> {{ $dokter->poli->nama_poli }}</option>
-                    @foreach ($polis as $poli)
-                        <option value="{{ $poli->id }}"> {{ $poli->nama_poli }}</option>
-                    @endforeach
-                </select>
+                <input type="text" name="id_poli" id="id_poli"
+                    class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value="{{ $dokter->poli->nama_poli }}" disabled>
             </div>
             <button type="submit"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Update

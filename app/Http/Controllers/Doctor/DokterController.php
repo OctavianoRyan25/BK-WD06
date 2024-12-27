@@ -37,7 +37,6 @@ class DokterController extends Controller
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
             'no_hp' => 'required|string|max:255',
-            'id_poli' => 'required|exists:polis,id',
         ]);
 
         try {
@@ -45,7 +44,6 @@ class DokterController extends Controller
             $dokter->nama = $request->nama;
             $dokter->alamat = $request->alamat;
             $dokter->no_hp = $request->no_hp;
-            $dokter->id_poli = $request->id_poli;
             $dokter->save();
             Alert::toast('Profile berhasil diupdate', 'success');
             return redirect()->back();

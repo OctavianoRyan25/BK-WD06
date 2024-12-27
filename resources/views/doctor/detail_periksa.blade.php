@@ -45,40 +45,44 @@
             </div>
         @endif
 
-        {{-- Table Event --}}
+        {{-- Table Pasien --}}
         <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative mt-4">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-[#003d7a]">
                     <tr>
                         <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">Nama
                             Pasien</th>
-                        <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">Obat
+                        <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">Alamat
                         </th>
-                        <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">Keluhan
+                        <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">No. KTP
                         </th>
-                        <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">Catatan
+                        <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">No.
+                            Telepon
+                        </th>
+                        <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">No. RM
                         </th>
                         <th class="py-3 px-6 text-center text-sm font-medium text-white uppercase tracking-wider">Action
                         </th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @if ($detailPeriksas->isEmpty())
+                    @if ($pasiens->isEmpty())
                         <tr>
                             <td colspan="12" class="text-center py-4 font-bold">No data available</td>
                         </tr>
                     @else
-                        @foreach ($detailPeriksas as $index => $detailPeriksa)
+                        @foreach ($pasiens as $index => $pasien)
                             <tr class="hover:bg-gray-100 transition duration-200">
-                                <td class="py-2 px-3 text-center">{{ $detailPeriksa->periksa->daftarPoli->pasien->nama }}
+                                <td class="py-2 px-3 text-center">{{ $pasien->nama }}
                                 </td>
-                                <td class="py-2 px-3 text-center">{{ $detailPeriksa->obat->nama_obat }}</td>
-                                <td class="py-2 px-3 text-center">{{ $detailPeriksa->periksa->daftarPoli->keluhan }}</td>
-                                <td class="py-2 px-3 text-center">{{ $detailPeriksa->periksa->catatan }}</td>
+                                <td class="py-2 px-3 text-center">{{ $pasien->alamat }}</td>
+                                <td class="py-2 px-3 text-center">{{ $pasien->no_ktp }}</td>
+                                <td class="py-2 px-3 text-center">{{ $pasien->no_hp }}</td>
+                                <td class="py-2 px-3 text-center">{{ $pasien->no_rm }}</td>
                                 <td class="py-2 px-3 text-center gap-2">
                                     <div class="flex justify-center space-x-2">
-                                        <button class="text-blue-600 updateEvent transition duration-300 hover:scale-110"
-                                            onclick="openReadModal('{{ $detailPeriksa->id }}', '{{ $detailPeriksa->periksa->daftarPoli->pasien->nama }}', '{{ $detailPeriksa->periksa->daftarPoli->keluhan }}', '{{ $detailPeriksa->periksa->catatan }}', '{{ $detailPeriksa->periksa->tanggal }}', '{{ $detailPeriksa->periksa->biaya }}', '{{ $detailPeriksa->obat->nama_obat }}')">
+                                        <a class="text-blue-600 updateEvent transition duration-300 hover:scale-110"
+                                            href="{{ route('dokter.detail-periksa.show', ['pasien_id' => $pasien->id, 'dokter_id' => Auth::guard('dokter')->user()->id]) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor"
                                                 class="bi bi-receipt" viewBox="0 0 16 16">
                                                 <path
@@ -86,7 +90,7 @@
                                                 <path
                                                     d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
                                             </svg>
-                                        </button>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -104,7 +108,7 @@
 
 
         {{-- Modal read --}}
-        @if ($detailPeriksas->isNotEmpty())
+        {{-- @if ($detailPeriksas->isNotEmpty())
             <div id="readPeriksaModal"
                 class="fixed inset-0 hidden items-center justify-center bg-gray-900 bg-opacity-50 flex transition-opacity duration-300">
                 <div class="bg-white p-6 rounded-lg shadow-lg transform transition-all duration-300 scale-90 opacity-0 w-full sm:w-3/4 lg:w-6/12"
@@ -172,7 +176,7 @@
                     </div>
                 </div>
             </div>
-        @endif
+        @endif --}}
 
         <style>
             .loader {

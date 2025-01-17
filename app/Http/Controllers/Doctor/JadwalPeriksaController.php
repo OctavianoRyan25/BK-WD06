@@ -25,6 +25,15 @@ class JadwalPeriksaController extends Controller
             'status' => 'required|string'
         ]);
 
+        foreach (JadwalPeriksa::where('dokter_id', $request->dokter_id)->get() as $jadwal) {
+            if ($jadwal->hari === $request->hari) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Jadwal periksa sudah ada'
+                ], 400);
+            }
+        }
+
         if ($request->status === 'Aktif') {
             $activeJadwalPeriksa = JadwalPeriksa::where('dokter_id', $request->dokter_id)
                 ->where('status', 'Aktif')

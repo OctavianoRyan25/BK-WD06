@@ -143,3 +143,10 @@ Memuat relasi secara eager loading, tetapi hanya data relasi yang sesuai dengan 
 ->get():
 
 Mengambil semua data user beserta relasi yang telah difilter.
+
+public function scopeSearch($query, array $searches)
+    {
+        $query->when($searches['search'] ?? false, function ($query, $search) {
+            return $query->where('document_name', 'like', '%' . $search . '%');
+        });
+    }
